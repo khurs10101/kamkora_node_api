@@ -1,5 +1,5 @@
 import Address from '../models/addressModel.mjs'
-import { checkAndBundleNonEmptyFields } from '../utils/customValidator'
+import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 
 
 export const addAddressOfUser = (req, res, next) => {
