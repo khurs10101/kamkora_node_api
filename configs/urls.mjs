@@ -1,0 +1,1 @@
+export const mongoURI= "mongodb+srv://khurshidTestDB:9435324293@freecluster-d6uok.mongodb.net/kamkora?retryWrites=true&w=majority"
