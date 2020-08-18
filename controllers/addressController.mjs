@@ -10,13 +10,13 @@ export const addAddressOfUser = (req, res, next) => {
         userId,
         ...finalAddress
     }).save().then(address => {
-        console.log(address)
+        // console.log(address)
         res.status(201).json({
             message: "Address added successfully",
             address
         })
     }).catch(error => {
-        console.error(error)
+        // console.error(error)
         res.status(500).json({
             message: "Error adding address",
             errors: {
