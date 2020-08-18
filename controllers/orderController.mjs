@@ -33,7 +33,7 @@ const addToCart = (req, res, next) => {
         console.log(result)
         res.status(200).json({
             message: "orders added successfully",
-            orders: result
+            results: result
         })
     }).catch(error=>{
         console.log(error)
