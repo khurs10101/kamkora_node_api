@@ -4,6 +4,25 @@ import Cart from '../models/cartModel.mjs'
 import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 
 
+const getCartOfUsers = (req, res, next) => {
+    const userId = req.params.id
+    Cart.find({
+        userId: userId
+    }).sort({ updatedAt: "desc" }).then(carts => {
+        res.status(200).json({
+            message: "List of orders by cart",
+            carts
+        })
+    }).catch(err => {
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel server error"
+            }
+        })
+    })
+}
+
 const addToCart = (req, res, next) => {
 
     const { orders } = req.body
@@ -121,4 +140,4 @@ const updateOrder = (req, res, next) => {
 }
 
 
-export { addOrder, updateOrder, getAllOrders, getAllOrdersOfSingleUser, addToCart }
+export { addOrder, updateOrder, getAllOrders, getAllOrdersOfSingleUser, addToCart, getCartOfUsers }
