@@ -96,7 +96,7 @@ const getAllOrdersOfSingleUser = (req, res, next) => {
 
     Order.find({
         userId: userId
-    }).then(orders => {
+    }).sort({ updatedAt: "desc" }).then(orders => {
         res.status(200).json({
             message: "Current user order history",
             orders
