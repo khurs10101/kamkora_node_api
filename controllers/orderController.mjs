@@ -7,20 +7,30 @@ import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 const addToCart = (req, res, next) => {
 
     const { orders } = req.body
-    const userId= req.params.id
+    const userId = req.params.id
     console.log(orders)
-    let orderList=[]
-    let cart= new Cart({
+    let orderList = []
+    let cart = new Cart({
         userId: userId
     })
-    for(let order in orders){
+    for (let order in orders) {
         // orderList.push(new Order({
         //     ...order
         // }))
         console.log(order)
-        cart.orders.push(new Order({
+        let orderObject = new Order({
+            userId: userId,
             ...orders[order]
-        }))
+        });
+
+        cart.orders.push(orderObject)
+
+        orderObject.save().then(result => {
+            console.log(result)
+        }).catch(err => {
+            console.log(err)
+        })
+
     }
 
 
@@ -28,21 +38,21 @@ const addToCart = (req, res, next) => {
     //     userId: userId,
     //     orders: orderList
     // })
-    
-    cart.save().then(result=>{
+
+    cart.save().then(result => {
         console.log(result)
         res.status(200).json({
             message: "orders added successfully",
             results: result
         })
-    }).catch(error=>{
+    }).catch(error => {
         console.log(error)
     })
 }
 
 const getAllOrders = (req, res, next) => {
 
-    Order.find({}).then(orders => {
+    Order.find({}).sort({ updatedAt: 'desc' }).then(orders => {
         res.status(200).json({
             message: "List of all orders",
             cart: orders
