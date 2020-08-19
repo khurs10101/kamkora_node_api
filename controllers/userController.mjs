@@ -80,7 +80,7 @@ const userUpdate = (req, res, next) => {
 
 const usersList = (req, res, next) => {
 
-    User.find({})
+    User.find({}).sort({ updatedAt: "desc" })
         .then(users => {
             res.status(200).json({
                 message: "Success",

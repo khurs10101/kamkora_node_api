@@ -41,6 +41,10 @@ const userSchema = Schema({
     },
     states: {
         type: String
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
     }
 })
 

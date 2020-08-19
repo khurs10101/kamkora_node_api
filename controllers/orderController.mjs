@@ -1,7 +1,7 @@
 import express from 'express'
 import Order from '../models/orderModel.mjs'
 import Cart from '../models/cartModel.mjs'
-import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
+import { checkAndBundleNonEmptyFields, generate } from '../utils/customValidator.mjs'
 
 
 const getCartOfUsers = (req, res, next) => {
@@ -27,10 +27,12 @@ const addToCart = (req, res, next) => {
 
     const { orders } = req.body
     const userId = req.params.id
+    const docketId = generate(6)
     console.log(orders)
     let orderList = []
     let cart = new Cart({
-        userId: userId
+        userId: userId,
+        docketId: docketId
     })
     for (let order in orders) {
         // orderList.push(new Order({
@@ -38,6 +40,7 @@ const addToCart = (req, res, next) => {
         // }))
         console.log(order)
         let orderObject = new Order({
+            docketId: docketId,
             userId: userId,
             ...orders[order]
         });
