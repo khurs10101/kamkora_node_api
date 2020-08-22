@@ -5,7 +5,7 @@ import auth from '../middlewares/jwtAuthMiddleware.mjs'
 const router = express.Router()
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'upload/user_avatar/')
+        cb(null, 'upload/users/avatar')
     },
     filename: function (req, file, cb) {
         cb(null, new Date().getTime() + '-' + file.originalname)

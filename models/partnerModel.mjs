@@ -26,8 +26,10 @@ const partnerSchema = Schema({
     },
     password_digest: {
         type: String
-    }
-    ,
+    },
+    isAccountVerified: {
+        type: Boolean
+    },
     address: {
         type: String
     },
@@ -36,6 +38,10 @@ const partnerSchema = Schema({
     },
     states: {
         type: String
+    },
+    updatedAt:{
+        type: Date,
+        default: Date.now
     }
 })
 
