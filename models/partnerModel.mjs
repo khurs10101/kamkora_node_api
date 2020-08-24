@@ -15,9 +15,6 @@ const partnerSchema = Schema({
     email: {
         type: String
     },
-    orders: {
-        type: Array
-    },
     profession: {
         type: String
     },

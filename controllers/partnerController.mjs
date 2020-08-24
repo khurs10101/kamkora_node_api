@@ -2,30 +2,160 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { secret } from '../configs/secret.mjs'
 import Partner from '../models/partnerModel.mjs'
+import Avatar from '../models/avatarModel.mjs'
+import PersonalDoc from '../models/personalDocModel.mjs'
 import { checkAndBundleNonEmptyFields, userSignupInputValidator } from '../utils/customValidator.mjs'
 
 
+export const getPartnerAvatar = (req, res, next) => {
+    const userId = req.params.id
+
+    Avatar.findOne({
+        userId
+    }).sort({ updatedAt: "desc" }).then(doc => {
+        res.status(201).json({
+            message: "Avatar uploaded",
+            result: doc
+        })
+    }).catch(error => {
+        console.log(error)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel server error"
+            }
+        })
+    })
+
+}
 
 export const uploadPartnerAvatar = (req, res, next) => {
-    console.log(req.file)
-    res.status(200).json({
-        url: req.file.destination + "/" + req.file.filename
+    const userId = req.params.id
+    const url = req.filename.destination + "/" + req.file.filename
+    new Avatar({
+        userId,
+        url
+    }).save().then(result => {
+        res.status(201).json({
+            message: "Avatar uploaded",
+            result
+        })
+    }).catch(error => {
+        console.log(error)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel server error"
+            }
+        })
+    })
+
+
+}
+
+export const getPartnerDocumentIdProof = (req, res, next) => {
+
+    const userId = req.params.id
+    const { doc_type } = req.body
+
+    PersonalDoc.find({
+        userId: userId,
+        doc_type: doc_type
+    }).sort({ updatedAt: "desc" }).then(doc => {
+        console.log(doc)
+        res.status(200).json({
+            message: "Current avatar",
+            result: doc
+        })
+    }).catch(error => {
+        console.log(error)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel server error"
+            }
+        })
+    })
+
+}
+
+
+export const getPartnerDocumentAddressProof = (req, res, next) => {
+
+    const userId = req.params.id
+    const { doc_type } = req.body
+
+    PersonalDoc.find({
+        userId: userId,
+        doc_type
+    }).sort({ updatedAt: "desc" }).then(doc => {
+        console.log(doc)
+        res.status(200).json({
+            message: "Current avatar",
+            result: doc
+        })
+    }).catch(error => {
+        console.log(error)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel server error"
+            }
+        })
+    })
+
+}
+
+export const uploadPartnerDocumentIdProof = (req, res, next) => {
+
+    const userId = req.params.id
+    const { doc_type } = req.body
+    const url = req.file.destination + "/" + req.file.filename
+    let partnerDoc = new partnerDoc.save({
+        userId,
+        doc_type,
+        url
+    }).save().then(doc => {
+        res.status(201).json({
+            message: "Id proof uploaded",
+            result: doc
+        })
+    }).catch(error => {
+        console.error(error)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel server error"
+            }
+        })
     })
 }
 
-const uploadPartnerDocumentIdProof = (req, res, next) => {
-    res.status(200).json({
-        url: req.file.destination + "/" + req.file.filename
+export const uploadPartnerDocumentAddressProof = (req, res, next) => {
+    const userId = req.params.id
+    const { doc_type } = req.body
+    const url = req.file.destination + "/" + req.file.filename
+    let partnerDoc = new partnerDoc.save({
+        userId,
+        doc_type,
+        url
+    }).save().then(doc => {
+        res.status(201).json({
+            message: "Address proof uploaded",
+            result: doc
+        })
+    }).catch(error => {
+        console.error(error)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel server error"
+            }
+        })
     })
 }
 
-const uploadPartnerDocumentAddressProof = (req, res, next) => {
-    res.status(200).json({
-        url: req.file.destination + "/" + req.file.filename
-    })
-}
-
-const partnerList = (req, res, next) => {
+export const partnerList = (req, res, next) => {
     Partner.find({}).sort({ updatedAt: 'desc' }).then(partners => {
         console.log(partners)
         res.status(200).json({
@@ -43,7 +173,7 @@ const partnerList = (req, res, next) => {
     })
 }
 
-const partnerSignUp = (req, res, next) => {
+export const partnerSignUp = (req, res, next) => {
 
     let finalUser = checkAndBundleNonEmptyFields(req.body)
 
@@ -99,7 +229,7 @@ const partnerSignUp = (req, res, next) => {
 }
 
 
-const partnerSignIn = (req, res, next) => {
+export const partnerSignIn = (req, res, next) => {
 
     const { email, password } = req.body
 
@@ -150,9 +280,9 @@ const partnerSignIn = (req, res, next) => {
 
 }
 
-const partnerUpdate = (req, res, next) => {
+export const partnerUpdate = (req, res, next) => {
 
 }
 
 
-export { partnerList, partnerSignIn, partnerSignUp, partnerUpdate, uploadPartnerDocumentIdProof, uploadPartnerDocumentAddressProof }
+// export { partnerList, partnerSignIn, partnerSignUp, partnerUpdate, uploadPartnerDocumentIdProof, uploadPartnerDocumentAddressProof }
