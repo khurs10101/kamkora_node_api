@@ -26,12 +26,15 @@ const addAService = (req, res, next) => {
 
     let finalService = checkAndBundleNonEmptyFields(req.body)
 
+    const url = req.file.destination + "/" + req.file.filename
+
     Service.findOne(
         { name: finalService['name'] }
     ).then(service => {
         if (!service) {
             let newService = new Service({
-                ...finalService
+                ...finalService,
+                url
             })
 
             newService.save().then(result => {
@@ -61,6 +64,7 @@ const addAService = (req, res, next) => {
 
 
 const updateService = (req, res, next) => {
+
 
 }
 

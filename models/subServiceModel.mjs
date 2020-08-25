@@ -15,8 +15,13 @@ const subServiceModel = Schema({
         type: String
     },
 
-    avatar: {
+    url: {
         type: String
+    },
+
+    updatedAt:{
+        type: Date,
+        default: Date.now
     }
 
 })
