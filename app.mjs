@@ -14,7 +14,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
-app.use(express.static('uploads'))
+app.use(express.static('upload'))
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(result => {
