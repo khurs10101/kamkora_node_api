@@ -9,9 +9,8 @@ import partnerRoutes from './routes/partnerRoutes.mjs'
 import serviceRoutes from './routes/servicesRoutes.mjs'
 import orderRoutes from './routes/ordersRoutes.mjs'
 import addressRoutes from './routes/addressRoutes.mjs'
-
 const app = express()
-app.use(cors())
+app.use(cors({origin: '*'}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/upload', express.static('upload'))
