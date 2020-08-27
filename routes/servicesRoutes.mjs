@@ -1,7 +1,11 @@
 import express from 'express'
 import multer from 'multer'
 import auth from '../middlewares/jwtAuthMiddleware.mjs'
-import { listAllServices, addAService, updateService, updateSubService } from '../controllers/serviceController.mjs'
+import {
+    listAllServices, addAService,
+    updateService, updateSubService,
+    deleteService, addSubService
+} from '../controllers/serviceController.mjs'
 
 const router = express.Router()
 const storage = multer.diskStorage({
@@ -23,8 +27,8 @@ const upload = multer({
 })
 
 router.get('/', listAllServices)
-router.post('/add', upload.single('service_image'), addAService)
+router.post('/add/:id', upload.single('service_image'), addAService)
 router.post('/edit/:id', upload.single('service_image'), updateService)
-router.post('/addsubservice/:id', upload.single('sub_service_image'), updateSubService)
-
+router.post('/addsubservice', upload.single('sub_service_image'), addSubService)
+router.post('/delete/:id', deleteService)
 export default router

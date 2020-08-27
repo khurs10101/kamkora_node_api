@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import fs from 'fs'
 import User from '../models/userModel.mjs'
+import Avatar from '../models/avatarModel.mjs'
 import { secret } from '../configs/secret.mjs'
 import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 
@@ -8,19 +10,40 @@ import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 
 const userUploadAvatar = (req, res, next) => {
     const userId = req.params.id
-    if (req.file) {
-        res.status(201).json({
-            message: "Image uploaded successfully",
-            avatar: req.file.path
+    const url = req.file.destination + "/" + req.file.filename
+    Avatar.findOne({
+        userId
+    }).then(user => {
+
+        let avatar = new Avatar({
+            userId,
+            url
         })
-    } else {
+
+        avatar.save().then(doc => {
+            if (user) {
+                fs.unlinkSync(user['url'])
+            }
+            res.status(201).json({
+                message: "Image uploaded successfully",
+                avatar: doc
+            })
+        }).catch(err => {
+            res.status(404).json({
+                message: "Internal Server error",
+                errors: {
+                    message: "Internal Server error",
+                }
+            })
+        })
+    }).catch(err => {
         res.status(404).json({
-            message: "No file selected",
+            message: "Internal Server error",
             errors: {
-                message: "No file selected"
+                message: "Internal Server error",
             }
         })
-    }
+    })
 
 }
 

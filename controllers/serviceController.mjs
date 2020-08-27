@@ -1,7 +1,105 @@
-import express from 'express'
+import fs from 'fs'
+import SubService from '../models/subServiceModel.mjs'
 import Service from '../models/serviceModel.mjs'
 import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 import isEmpty from 'lodash/isEmpty.js'
+
+export const addSubService = (req, res, next) => {
+    const { serviceId, subServiceId, name, rate } = checkAndBundleNonEmptyFields(req.body)
+    const url = req.file.destination + "/" + req.file.filename
+    Service.findOne({
+        serviceId
+    }).then(service => {
+        if (service) {
+            SubService.findOne({
+                subServiceId
+            }).then(subService => {
+                if (!subService) {
+                    let temp = new SubService({
+                        serviceId,
+                        subServiceId,
+                        name,
+                        rate,
+                        url
+                    })
+
+                    temp.save().then(subService => {
+                        res.status(201).json({
+                            message: "SubService added successfully",
+                            subService
+                        })
+                    })
+                } else {
+                    res.status(409).json({
+                        message: "SubService already exist",
+                        errors: {
+                            message: "SubService already exist",
+                        }
+
+                    })
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+        } else {
+            res.status(404).json({
+                message: "Service dont exist to add subservice",
+                errors: {
+                    message: "Service dont exist to add subservice",
+                }
+            })
+        }
+        fs.unlinkSync(url)
+    }).catch(err => {
+        fs.unlinkSync(url)
+        console.log(err)
+    })
+}
+
+export const deleteService = (req, res, next) => {
+    const serviceId = req.params.id
+    let fileLink;
+    Service.findOne({
+        serviceId
+    }).then(doc => {
+        if (doc) {
+            fileLink = doc['url']
+            console.log(fileLink)
+            Service.deleteOne({
+                serviceId
+            }).then(doc => {
+                console.log(doc)
+                fs.unlinkSync(fileLink)
+                res.status(200).json({
+                    message: "Service delete successfull",
+                    serviceId
+                })
+            }).catch(err => {
+                console.error(err)
+                res.status(500).json({
+                    message: "Internal Server error",
+                    errors: {
+                        message: "Internal Server error",
+                    }
+                })
+            })
+        } else {
+            res.status(404).json({
+                message: "No document found for given serviceId",
+                serviceId
+            })
+        }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).json({
+            message: "Internal Server error",
+            errors: {
+                message: "Internal Server error",
+            }
+        })
+    })
+
+}
 
 
 const listAllServices = (req, res, next) => {
@@ -24,13 +122,13 @@ const listAllServices = (req, res, next) => {
 
 const addAService = (req, res, next) => {
 
+    const serviceId = req.params.id
     let finalService = checkAndBundleNonEmptyFields(req.body)
-
     const url = req.file.destination + "/" + req.file.filename
 
-    Service.findOne(
-        { name: finalService['name'] }
-    ).then(service => {
+    Service.findOne({
+        serviceId
+    }).then(service => {
         if (!service) {
             let newService = new Service({
                 ...finalService,
@@ -58,6 +156,16 @@ const addAService = (req, res, next) => {
                 }
             })
         }
+        fs.unlinkSync(url)
+    }).catch(err => {
+        fs.unlinkSync(url)
+        console.log(err)
+        res.status(500).json({
+            message: "Internal server error",
+            errors: {
+                message: "Internal server error",
+            }
+        })
     })
 
 }
@@ -65,7 +173,7 @@ const addAService = (req, res, next) => {
 
 const updateService = (req, res, next) => {
 
-    
+
 
 }
 
