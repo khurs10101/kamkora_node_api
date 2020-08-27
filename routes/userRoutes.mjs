@@ -28,7 +28,7 @@ const upload = multer({
 
 // const upload= multer({dest: 'upload/'})
 
-router.get('/', auth, usersList)
+router.get('/', usersList)
 router.post('/signin', userSignin)
 router.post('/signup', userSignup)
 router.post('/edit/:id', userUpdate)

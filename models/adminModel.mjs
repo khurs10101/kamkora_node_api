@@ -1,8 +1,20 @@
 import mongoose from 'mongoose'
 
-const Schema= mongoose.Schema
+const Schema = mongoose.Schema
 
-const adminSchema= Schema({
+const adminSchema = Schema({
+
+    email: {
+        type: String
+    },
+
+    password: {
+        type: String
+    },
+
+    role: {
+        type: String
+    }
 
 })
 
