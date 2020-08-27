@@ -2,7 +2,6 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import path from 'path'
 import { mongoURI } from './configs/urls.mjs'
 import userRoutes from './routes/userRoutes.mjs'
 import adminRoutes from './routes/adminRoutes.mjs'
@@ -12,9 +11,9 @@ import orderRoutes from './routes/ordersRoutes.mjs'
 import addressRoutes from './routes/addressRoutes.mjs'
 
 const app = express()
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors())
 app.use('/upload', express.static('upload'))
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
