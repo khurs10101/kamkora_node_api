@@ -2,7 +2,8 @@ import express from 'express'
 import {
     addOrder, updateOrder, getAllOrders,
     getAllOrdersOfSingleUser, addToCart, getCartOfUsers,
-    getOrdersOfPartners
+    getOrdersOfPartners, completedCurrentOrder, assignOrderAuto,
+    acceptCurrentOrder, rejectCurrentOrder
 } from '../controllers/orderController.mjs'
 import auth from '../middlewares/jwtAuthMiddleware.mjs'
 
@@ -16,6 +17,10 @@ router.post('/add/:id', addOrder)
 router.post('/update/:id', updateOrder)
 router.post('/cart/:id', addToCart)
 router.post('/partners', getOrdersOfPartners)
+router.post('/accept/:id', acceptCurrentOrder)
+router.post('/reject/:id', rejectCurrentOrder)
+router.post('/complete/:id', completedCurrentOrder)
+
 
 
 

@@ -9,7 +9,10 @@ export const assignOrderAuto = (req, res, next) => {
 }
 
 export const completedCurrentOrder = (req, res, next) => {
-    const id = req.params.id
+    console.log(req.body)
+    const { orderId } = req.body
+    const id= orderId
+    console.log(id)
     Order.findOne({
         _id: id
     }).then(order => {
@@ -94,7 +97,10 @@ export const completedCurrentOrder = (req, res, next) => {
 }
 
 export const acceptCurrentOrder = (req, res, next) => {
-    const id = req.params.id
+    console.log(req.body)
+    const { orderId } = req.body
+    const id= orderId
+    console.log(id)
     Order.findOne({
         _id: id
     }).then(order => {
@@ -160,7 +166,10 @@ export const acceptCurrentOrder = (req, res, next) => {
 }
 
 export const rejectCurrentOrder = (req, res, next) => {
-    const id = req.params.id
+    console.log(req.body)
+    const { orderId } = req.body
+    const id= orderId
+    console.log(id)
     Order.findOne({
         _id: id
     }).then(order => {
