@@ -9,6 +9,9 @@ const personalDoc = new Schema({
     doc_type: {
         type: String
     },
+    doc_category: {
+        type: String
+    },
     doc_number: {
         type: String
     },

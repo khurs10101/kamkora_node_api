@@ -8,7 +8,7 @@ import auth from '../middlewares/jwtAuthMiddleware.mjs'
 
 const router = express.Router()
 
-router.get('/:id', auth, getAllOrdersOfSingleUser)
+router.get('/:id', getAllOrdersOfSingleUser)
 // router.get('/recent/:id', auth, getCurrentOrderOfSingleUser)
 router.get('/', getAllOrders)
 router.get('/cart/:id', getCartOfUsers)

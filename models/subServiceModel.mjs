@@ -11,6 +11,10 @@ const subServiceModel = Schema({
         type: String
     },
 
+    subServiceId: {
+        type: String
+    },
+
     rate: {
         type: String
     },
@@ -19,11 +23,11 @@ const subServiceModel = Schema({
         type: String
     },
 
-    updatedAt:{
+    updatedAt: {
         type: Date,
         default: Date.now
     }
 
 })
 
-export default mongoose.model('SubService', subServiceModel)
+export default mongoose.model('Subservice', subServiceModel)

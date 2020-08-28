@@ -56,9 +56,9 @@ export const uploadPartnerAvatar = (req, res, next) => {
 export const getPartnerDocumentIdProof = (req, res, next) => {
 
     const userId = req.params.id
-    const { doc_type } = req.body
+    const { doc_type, doc_category } = req.body
 
-    PersonalDoc.find({
+    PersonalDoc.findOne({
         userId: userId,
         doc_type: doc_type
     }).sort({ updatedAt: "desc" }).then(doc => {

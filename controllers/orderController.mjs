@@ -4,6 +4,221 @@ import Cart from '../models/cartModel.mjs'
 import { checkAndBundleNonEmptyFields, generate } from '../utils/customValidator.mjs'
 
 
+export const assignOrderAuto = (req, res, next) => {
+
+}
+
+export const completedCurrentOrder = (req, res, next) => {
+    const id = req.params.id
+    Order.findOne({
+        _id: id
+    }).then(order => {
+        if (order) {
+            if (order['status'] === 'pending') {
+                Order.updateOne({
+                    _id: id
+                }, {
+                    $set: { status: 'completed' }
+                }).then(order => {
+                    res.status(200).json({
+                        message: "Order Completed",
+                        status: "completed"
+                    })
+                }).catch(err => {
+                    console.log(err)
+                    res.status(500).json({
+                        message: "Internel server error",
+                        errors: {
+                            message: "Internel Server error"
+                        }
+                    })
+                })
+            }
+
+            if (order['status'] === 'cancelled') {
+                res.status(200).json({
+                    message: "Order Was cancelled",
+                    status: "cancelled"
+                })
+            }
+
+            if (order['status'] === 'accepted') {
+
+                Order.updateOne({
+                    _id: id
+                }, {
+                    $set: { status: 'completed' }
+                }).then(order => {
+                    res.status(200).json({
+                        message: "Order Completed",
+                        status: "completed"
+                    })
+                }).catch(err => {
+                    console.log(err)
+                    res.status(500).json({
+                        message: "Internel server error",
+                        errors: {
+                            message: "Internel Server error"
+                        }
+                    })
+                })
+                // res.status(200).json({
+                //     message: "Order was accepted",
+                //     status: "accepted"
+                // })
+            }
+
+            if (order['status'] == 'completed') {
+                res.status(200).json({
+                    message: "Order was completed",
+                    status: "completed"
+                })
+            }
+        } else {
+            res.status(404).json({
+                message: "Order not found",
+                errors: {
+                    message: "Order not found",
+                }
+            })
+        }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel Server error"
+            }
+        })
+    })
+}
+
+export const acceptCurrentOrder = (req, res, next) => {
+    const id = req.params.id
+    Order.findOne({
+        _id: id
+    }).then(order => {
+        if (order) {
+            if (order['status'] === 'pending') {
+                Order.updateOne({
+                    _id: id
+                }, {
+                    $set: { status: 'accepted' }
+                }).then(order => {
+                    res.status(200).json({
+                        message: "Order Accepted",
+                        status: "accepted"
+                    })
+                }).catch(err => {
+                    console.log(err)
+                    res.status(500).json({
+                        message: "Internel server error",
+                        errors: {
+                            message: "Internel Server error"
+                        }
+                    })
+                })
+            }
+
+            if (order['status'] === 'cancelled') {
+                res.status(200).json({
+                    message: "Order Was cancelled",
+                    status: "cancelled"
+                })
+            }
+
+            if (order['status'] === 'accepted') {
+                res.status(200).json({
+                    message: "Order was accepted",
+                    status: "accepted"
+                })
+            }
+
+            if (order['status'] == 'completed') {
+                res.status(200).json({
+                    message: "Order was completed",
+                    status: "completed"
+                })
+            }
+        } else {
+            res.status(404).json({
+                message: "Order not found",
+                errors: {
+                    message: "Order not found",
+                }
+            })
+        }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel Server error"
+            }
+        })
+    })
+}
+
+export const rejectCurrentOrder = (req, res, next) => {
+    const id = req.params.id
+    Order.findOne({
+        _id: id
+    }).then(order => {
+        if (order) {
+            if (order['status'] === 'pending') {
+                Order.updateOne({
+                    _id: id
+                }, {
+                    $set: { status: 'cancelled' }
+                }).then(order => {
+                    res.status(200).json({
+                        message: "Order cancelled",
+                        status: "cancelled"
+                    })
+                }).catch(err => {
+                    console.log(err)
+                    res.status(500).json({
+                        message: "Internel server error",
+                        errors: {
+                            message: "Internel Server error"
+                        }
+                    })
+                })
+            }
+
+            if (order['status'] === 'cancelled') {
+                res.status(200).json({
+                    message: "Order Was cancelled",
+                    status: "cancelled"
+                })
+            }
+
+            if (order['status'] === 'accepted') {
+                res.status(200).json({
+                    message: "Order was accepted",
+                    status: "accepted"
+                })
+            }
+        } else {
+            res.status(404).json({
+                message: "Order not found",
+                errors: {
+                    message: "Order not found",
+                }
+            })
+        }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).json({
+            message: "Internel server error",
+            errors: {
+                message: "Internel Server error"
+            }
+        })
+    })
+}
+
+
 export const getOrdersOfPartners = (req, res, next) => {
     const { userId, serviceId } = req.body
 

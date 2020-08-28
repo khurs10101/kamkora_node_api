@@ -4,6 +4,27 @@ import Service from '../models/serviceModel.mjs'
 import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 import isEmpty from 'lodash/isEmpty.js'
 
+
+export const listSubserviceByService = (req, res, next) => {
+    const serviceId= req.params.id
+    SubService.find({
+        serviceId
+    }).then(subServices => {
+        res.status(200).json({
+            message: "All subservice based on service",
+            serviceId,
+            subServices
+        })
+    }).catch(err => {
+        res.status(500).json({
+            message: "Internal server error",
+            errors: {
+                message: "Internal server error",
+            }
+        })
+    })
+}
+
 export const addSubService = (req, res, next) => {
     const { serviceId, subServiceId, name, rate } = checkAndBundleNonEmptyFields(req.body)
     const url = req.file.destination + "/" + req.file.filename
@@ -30,6 +51,7 @@ export const addSubService = (req, res, next) => {
                         })
                     })
                 } else {
+                    fs.unlinkSync(url)
                     res.status(409).json({
                         message: "SubService already exist",
                         errors: {
@@ -39,9 +61,11 @@ export const addSubService = (req, res, next) => {
                     })
                 }
             }).catch(err => {
+                fs.unlinkSync(url)
                 console.log(err)
             })
         } else {
+            fs.unlinkSync(url)
             res.status(404).json({
                 message: "Service dont exist to add subservice",
                 errors: {
@@ -49,7 +73,7 @@ export const addSubService = (req, res, next) => {
                 }
             })
         }
-        fs.unlinkSync(url)
+
     }).catch(err => {
         fs.unlinkSync(url)
         console.log(err)
@@ -132,7 +156,8 @@ const addAService = (req, res, next) => {
         if (!service) {
             let newService = new Service({
                 ...finalService,
-                url
+                url,
+                serviceId
             })
 
             newService.save().then(result => {
@@ -141,6 +166,7 @@ const addAService = (req, res, next) => {
                     payload: result
                 })
             }).catch(error => {
+                fs.unlinkSync(url)
                 req.status(500).json({
                     message: "Server error",
                     errors: {
@@ -149,6 +175,7 @@ const addAService = (req, res, next) => {
                 })
             })
         } else {
+            fs.unlinkSync(url)
             req.status(404).json({
                 message: "Service already exists",
                 errors: {
@@ -156,7 +183,6 @@ const addAService = (req, res, next) => {
                 }
             })
         }
-        fs.unlinkSync(url)
     }).catch(err => {
         fs.unlinkSync(url)
         console.log(err)
