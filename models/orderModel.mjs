@@ -12,7 +12,13 @@ const orderSchema = new Schema({
     serviceId: {
         type: String
     },
+    subServiceId: {
+        type: String
+    },
     subcategory: {
+        type: String
+    },
+    subServiceName: {
         type: String
     },
     rate: {
