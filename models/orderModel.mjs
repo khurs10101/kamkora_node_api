@@ -6,6 +6,9 @@ const orderSchema = new Schema({
     userId: {
         type: String
     },
+    partnerId: {
+        type: String
+    },
     docketId: {
         type: String
     },

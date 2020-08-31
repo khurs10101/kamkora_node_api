@@ -64,6 +64,7 @@ const userUpdate = (req, res, next) => {
                 }
                 User.update(updatedUser)
                     .then(result => {
+                        console.log(result)
                         let token = jwt.sign({
                             ...updatedUser
                         },
@@ -73,10 +74,24 @@ const userUpdate = (req, res, next) => {
                             }
 
                         )
-                        res.status(201).json({
-                            message: "record updated successfully",
-                            token: token
+
+                        User.findById(user['_id'])
+                        .then(user=>{
+                            res.status(201).json({
+                                message: "record updated successfully",
+                                token: token,
+                                user
+                            })
+                        }).catch(err=>{
+                            res.status(500).json({
+                                message: "Server error",
+                                errors: {
+                                    message: "Server error"
+                                }
+                            })
                         })
+
+                        
                     })
                     .catch(err => {
                         console.log(err)

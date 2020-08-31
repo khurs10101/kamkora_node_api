@@ -10,8 +10,8 @@ export const assignOrderAuto = (req, res, next) => {
 
 export const completedCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const { orderId } = req.body
-    const id= orderId
+    const { orderId, partnerId } = req.body
+    const id = orderId
     console.log(id)
     Order.findOne({
         _id: id
@@ -21,7 +21,10 @@ export const completedCurrentOrder = (req, res, next) => {
                 Order.updateOne({
                     _id: id
                 }, {
-                    $set: { status: 'completed' }
+                    $set: {
+                        status: 'completed',
+                        partnerId: partnerId
+                    }
                 }).then(order => {
                     res.status(200).json({
                         message: "Order Completed",
@@ -98,8 +101,8 @@ export const completedCurrentOrder = (req, res, next) => {
 
 export const acceptCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const { orderId } = req.body
-    const id= orderId
+    const { orderId, partnerId } = req.body
+    const id = orderId
     console.log(id)
     Order.findOne({
         _id: id
@@ -109,7 +112,10 @@ export const acceptCurrentOrder = (req, res, next) => {
                 Order.updateOne({
                     _id: id
                 }, {
-                    $set: { status: 'accepted' }
+                    $set: {
+                        status: 'accepted',
+                        partnerId: partnerId
+                    }
                 }).then(order => {
                     res.status(200).json({
                         message: "Order Accepted",
@@ -167,8 +173,8 @@ export const acceptCurrentOrder = (req, res, next) => {
 
 export const rejectCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const { orderId } = req.body
-    const id= orderId
+    const { orderId, partnerId } = req.body
+    const id = orderId
     console.log(id)
     Order.findOne({
         _id: id
@@ -178,7 +184,10 @@ export const rejectCurrentOrder = (req, res, next) => {
                 Order.updateOne({
                     _id: id
                 }, {
-                    $set: { status: 'cancelled' }
+                    $set: {
+                        status: 'cancelled',
+                        partnerId: partnerId
+                    }
                 }).then(order => {
                     res.status(200).json({
                         message: "Order cancelled",
