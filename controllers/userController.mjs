@@ -21,26 +21,32 @@ const userUploadAvatar = (req, res, next) => {
         })
 
         avatar.save().then(doc => {
-            if (user) {
-                fs.unlinkSync(user['url'])
+            if (doc) {
+                // if (user != null) {
+                //     fs.unlinkSync(user['url'])
+                //     console.log("unlinked: " + user['url'])
+                // }
+
+                res.status(201).json({
+                    message: "Image uploaded successfully",
+                    avatar: doc
+                })
             }
-            res.status(201).json({
-                message: "Image uploaded successfully",
-                avatar: doc
-            })
+
         }).catch(err => {
-            res.status(404).json({
-                message: "Internal Server error",
+            console.log(err)
+            res.status(500).json({
+                message: "avatar saved failed",
                 errors: {
-                    message: "Internal Server error",
+                    message: "avatar saved failed",
                 }
             })
         })
     }).catch(err => {
         res.status(404).json({
-            message: "Internal Server error",
+            message: "User not found",
             errors: {
-                message: "Internal Server error",
+                message: "User not found",
             }
         })
     })
@@ -76,22 +82,22 @@ const userUpdate = (req, res, next) => {
                         )
 
                         User.findById(user['_id'])
-                        .then(user=>{
-                            res.status(201).json({
-                                message: "record updated successfully",
-                                token: token,
-                                user
+                            .then(user => {
+                                res.status(201).json({
+                                    message: "record updated successfully",
+                                    token: token,
+                                    user
+                                })
+                            }).catch(err => {
+                                res.status(500).json({
+                                    message: "Server error",
+                                    errors: {
+                                        message: "Server error"
+                                    }
+                                })
                             })
-                        }).catch(err=>{
-                            res.status(500).json({
-                                message: "Server error",
-                                errors: {
-                                    message: "Server error"
-                                }
-                            })
-                        })
 
-                        
+
                     })
                     .catch(err => {
                         console.log(err)
