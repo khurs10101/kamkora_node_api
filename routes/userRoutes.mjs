@@ -1,6 +1,6 @@
 import express from 'express'
 import multer from 'multer'
-import { userSignin, userSignup, usersList, userUpdate, userUploadAvatar } from '../controllers/userController.mjs'
+import { userSignin, userSignup, usersList, userUpdate, userUploadAvatar, userGetAvatar } from '../controllers/userController.mjs'
 import auth from '../middlewares/jwtAuthMiddleware.mjs'
 const router = express.Router()
 const storage = multer.diskStorage({
@@ -33,6 +33,7 @@ router.post('/signin', userSignin)
 router.post('/signup', userSignup)
 router.post('/edit/:id', userUpdate)
 router.post('/avatar/:id', upload.single('userAvatar'), userUploadAvatar)
+router.get('/avatar/:id', userGetAvatar)
 // router.post('/upload/:id', userUploadProfilePic)
 
 export default router

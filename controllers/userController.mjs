@@ -7,6 +7,36 @@ import { secret } from '../configs/secret.mjs'
 import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 
 
+export const userGetAvatar = (req, res, next) => {
+    const userId = req.params.id
+    Avatar.findOne({
+        userId
+    }).sort({
+        updatedAt: "desc"
+    }).then(avatar => {
+        if (avatar) {
+            res.status(200).json({
+                message: "Avatar found",
+                avatar
+            })
+        } else {
+            res.status(404).json({
+                message: "User not found",
+                errors: {
+                    message: "User not found",
+                }
+            })
+        }
+    }).catch(err => {
+        res.status(500).json({
+            message: "Internal server error",
+            errors: {
+                message: "Internal server error",
+            }
+        })
+    })
+
+}
 
 const userUploadAvatar = (req, res, next) => {
     const userId = req.params.id
