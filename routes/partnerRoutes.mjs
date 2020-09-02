@@ -43,7 +43,7 @@ router.get('/', partnerList)
 router.post('/signup', partnerSignUp)
 router.post('/signin', partnerSignIn)
 router.put('/edit/:id', partnerUpdate)
-router.post('/upload/avatar/:id', upload.single('avatar'), uploadPartnerAvatar)
+router.post('/upload/avatar/:id', upload.single('partnerAvatar'), uploadPartnerAvatar)
 router.post('/upload/id/:id', upload.single('personalId'), uploadPartnerDocumentIdProof)
 router.post('/upload/address/:id', upload.single('addressId'), uploadPartnerDocumentAddressProof)
 

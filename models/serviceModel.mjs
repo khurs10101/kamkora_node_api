@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const serviceSchema = Schema({
 
     name: {
-        type: String
+        type: String,
+        text: true
     },
 
     url: {
@@ -18,6 +19,10 @@ const serviceSchema = Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    tags: {
+        type: String,
+        text: true
     }
 
 })

@@ -4,7 +4,8 @@ import auth from '../middlewares/jwtAuthMiddleware.mjs'
 import {
     listAllServices, addAService,
     updateService, updateSubService,
-    deleteService, addSubService, listSubserviceByService
+    deleteService, addSubService, listSubserviceByService,
+    searchServiceAndSubservice
 } from '../controllers/serviceController.mjs'
 
 const router = express.Router()
@@ -32,4 +33,5 @@ router.post('/edit/:id', upload.single('service_image'), updateService)
 router.post('/addsubservice', upload.single('sub_service_image'), addSubService)
 router.post('/delete/:id', deleteService)
 router.get('/subservice/:id', listSubserviceByService)
+router.get('/search', searchServiceAndSubservice)
 export default router

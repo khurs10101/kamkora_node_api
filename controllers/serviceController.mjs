@@ -5,8 +5,45 @@ import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 import isEmpty from 'lodash/isEmpty.js'
 
 
+export const searchServiceAndSubservice = async (req, res, next) => {
+    let query = req.query.q;
+    console.log(query)
+
+    // let result = await SubService
+    //     .find({
+    //         $text: { $search: query }
+    //     },
+    //         {
+    //             score: {
+    //                 $meta: 'textScore'
+    //             }
+    //         }
+    //     )
+
+    let result = await SubService
+        .find({
+            name: { $regex: query, $options: "i" }
+        }).catch(err => {
+            res.status(500).json({
+                message: "Server error",
+                errors: {
+                    message: "Server error",
+                }
+            })
+        })
+
+    result = result.map(r => r.toObject())
+
+    res.status(200).json({
+        result
+    })
+
+    console.log(result)
+
+}
+
 export const listSubserviceByService = (req, res, next) => {
-    const serviceId= req.params.id
+    const serviceId = req.params.id
     SubService.find({
         serviceId
     }).then(subServices => {

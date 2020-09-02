@@ -1,4 +1,6 @@
+import http from 'http'
 import express from 'express'
+import socketio from 'socket.io'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import cors from 'cors'
@@ -9,8 +11,11 @@ import partnerRoutes from './routes/partnerRoutes.mjs'
 import serviceRoutes from './routes/servicesRoutes.mjs'
 import orderRoutes from './routes/ordersRoutes.mjs'
 import addressRoutes from './routes/addressRoutes.mjs'
+
+const PORT = process.env.PORT || 5000
+
 const app = express()
-app.use(cors({origin: '*'}))
+app.use(cors({ origin: '*' }))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/upload', express.static('upload'))
@@ -32,8 +37,10 @@ app.use('/api/address', addressRoutes)
 
 
 
+const server = http.createServer(app)
+export const io = socketio(server)
 
 
-app.listen(5000, () => {
-    console.log("server running at port 5000")
+server.listen(PORT, () => {
+    console.log(`server running at port ${PORT}`)
 })

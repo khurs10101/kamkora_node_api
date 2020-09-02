@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const subServiceModel = Schema({
 
     name: {
-        type: String
+        type: String,
+        text: true
     },
 
     serviceId: {
@@ -26,6 +27,10 @@ const subServiceModel = Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    tags: {
+        type: String,
+        text: true
     }
 
 })
