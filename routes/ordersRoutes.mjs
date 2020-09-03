@@ -2,7 +2,7 @@ import express from 'express'
 import {
     addOrder, updateOrder, getAllOrders,
     getAllOrdersOfSingleUser, addToCart, getCartOfUsers,
-    getOrdersOfPartners, completedCurrentOrder, assignOrderAuto,
+    getOrdersOfPartners, completedCurrentOrder,
     acceptCurrentOrder, rejectCurrentOrder
 } from '../controllers/orderController.mjs'
 import auth from '../middlewares/jwtAuthMiddleware.mjs'

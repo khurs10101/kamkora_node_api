@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import Order from './orderModel.mjs'
+import Address from './addressModel.mjs'
 import { generate } from '../utils/customValidator.mjs'
 
 const cartSchema = mongoose.Schema({
@@ -12,6 +13,10 @@ const cartSchema = mongoose.Schema({
     },
     orders: {
         type: [Order.Schema]
+    },
+
+    address: {
+        type: [Address.Schema]
     }
 })
 

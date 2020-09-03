@@ -163,7 +163,7 @@ export const deleteService = (req, res, next) => {
 }
 
 
-const listAllServices = (req, res, next) => {
+export const listAllServices = (req, res, next) => {
 
     Service.find({}).then(results => {
         res.status(200).json({
@@ -181,7 +181,7 @@ const listAllServices = (req, res, next) => {
 
 }
 
-const addAService = (req, res, next) => {
+export const addAService = (req, res, next) => {
 
     const serviceId = req.params.id
     let finalService = checkAndBundleNonEmptyFields(req.body)
@@ -234,13 +234,13 @@ const addAService = (req, res, next) => {
 }
 
 
-const updateService = (req, res, next) => {
+export const updateService = (req, res, next) => {
 
 
 
 }
 
-const updateSubService = (req, res, next) => {
+export const updateSubService = (req, res, next) => {
 
     let id = req.params.id
     let finalSubService = checkAndBundleNonEmptyFields(req.body)
@@ -314,4 +314,4 @@ const updateSubService = (req, res, next) => {
 
 }
 
-export { listAllServices, addAService, updateService, updateSubService }
+// export { listAllServices, addAService, updateService, updateSubService }

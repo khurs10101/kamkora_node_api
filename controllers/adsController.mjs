@@ -3,6 +3,20 @@ import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 import AdsModel from '../models/adsModel.mjs'
 
 
+export const getAdsForClientHomePage = (req, res, next) => {
+
+}
+
+export const getAdsForClientServicePage = (req, res, next) => {
+
+}
+
+
+export const getAdsForClientSubServicePage = (req, res, next) => {
+
+}
+
+
 export const getAllAds = (req, res, next) => {
 
     AdsModel.find({

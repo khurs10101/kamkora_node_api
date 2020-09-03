@@ -11,6 +11,8 @@ import partnerRoutes from './routes/partnerRoutes.mjs'
 import serviceRoutes from './routes/servicesRoutes.mjs'
 import orderRoutes from './routes/ordersRoutes.mjs'
 import addressRoutes from './routes/addressRoutes.mjs'
+import appPagesRoutes from './routes/appPagesRoutes.mjs'
+import adsRoutes from './routes/adsRoutes.mjs'
 
 const PORT = process.env.PORT || 5000
 
@@ -34,6 +36,8 @@ app.use('/api/partners', partnerRoutes)
 app.use('/api/services', serviceRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/address', addressRoutes)
+app.use('/api/apps', appPagesRoutes)
+app.use('/api/ads', adsRoutes)
 
 
 

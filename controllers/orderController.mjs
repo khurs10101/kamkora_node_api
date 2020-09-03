@@ -1,12 +1,10 @@
 import express from 'express'
 import Order from '../models/orderModel.mjs'
 import Cart from '../models/cartModel.mjs'
+import Partner from '../models/partnerModel.mjs'
 import { checkAndBundleNonEmptyFields, generate } from '../utils/customValidator.mjs'
+import { distanceBetweenLatLong } from '../utils/geoUtils.mjs'
 
-
-export const assignOrderAuto = (req, res, next) => {
-
-}
 
 export const completedCurrentOrder = (req, res, next) => {
     console.log(req.body)
@@ -277,7 +275,6 @@ const getCartOfUsers = (req, res, next) => {
 }
 
 const addToCart = (req, res, next) => {
-
     const { orders } = req.body
     const userId = req.params.id
     const docketId = generate(6)
@@ -320,10 +317,48 @@ const addToCart = (req, res, next) => {
             message: "orders added successfully",
             results: result
         })
+        assignOrderAuto(res, result);
     }).catch(error => {
         console.log(error)
     })
 }
+
+
+const assignOrderAuto = (res, cart) => {
+    console.log("Assign cart auto result: " + cart)
+    const address = cart.address
+    const city = address.city
+    const userLatitude = address.latitude
+    const userLongitude = address.longitude
+
+
+    let sortedPartnerByDistance = []
+    let partnerAndDistance = {}
+
+    Partner.find({
+        city: city
+    }).then(partners => {
+        if (partners) {
+
+            for (let i in partners) {
+                partnerLatitude = partners[i].latitude
+                partnerLongitude = partners[i].longitude
+                let distance = distanceBetweenLatLong(userLatitude, userLongitude,
+                    partnerLatitude, partnerLongitude)
+                partnerAndDistance['partner'] = partners[i]
+                partnerAndDistance['distance'] = distance
+                sortedPartnerByDistance.push(partnerAndDistance)
+            }
+
+
+        } else {
+
+        }
+    })
+
+
+}
+
 
 const getAllOrders = (req, res, next) => {
 

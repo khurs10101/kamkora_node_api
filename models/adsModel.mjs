@@ -19,6 +19,19 @@ const adsSchema = new Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    ad_location: {
+        type: String
+    },
+    subServiceId: {
+        type: String
+    },
+    title: {
+        type: String
+    },
+
+    description: {
+        type: String
     }
 })
 
