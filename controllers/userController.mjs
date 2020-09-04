@@ -1,10 +1,89 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import fetch from 'node-fetch'
 import fs from 'fs'
 import User from '../models/userModel.mjs'
 import Avatar from '../models/avatarModel.mjs'
 import { secret } from '../configs/secret.mjs'
-import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
+import { checkAndBundleNonEmptyFields, generate } from '../utils/customValidator.mjs'
+
+
+export const sendAndVerifyUserOtp = (req, res, next) => {
+
+    let { mobile, userId, type } = req.body
+    const otp = generate(6)
+    mobile = "+91" + mobile
+    console.log("mobile number is " + mobile)
+    let message = ""
+    if (type === 1) {
+        //registration
+        message = `Otp for homeserv registration is ${otp}`
+    }
+
+    if (type === 2) {
+        //login
+        message = `Otp for homeserv login is ${otp}`
+    }
+
+    if (type === 3) {
+        //change number
+        message = `Otp for homeserv for number change is ${otp}`
+    }
+
+    if (type === 4) {
+        //forget password
+        message = `Otp for homeserv password recovery is ${otp}`
+    }
+
+
+    let body = {
+        "listsms":
+            [
+                {
+                    "sms": message,
+                    "mobiles": mobile,
+                    "senderid": "HOMESERV-OTP",
+                    "clientSMSID": "1947692308",
+                    "accountusagetypeid": "6"
+                },
+            ],
+        "password": "f4c5eb7711XX", "user": "otdemo"
+    }
+
+
+    fetch('http://login.otechnix.in/REST/sendsms/ ', {
+        method: 'post',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+    }).then(response => {
+        response.json().then(response => {
+            console.log(response)
+            res.status(200).json({
+                message: "otp sent successfully",
+                otp
+            })
+        }).catch(err => {
+            console.log(err)
+            res.status(500).json({
+                message: "otp sent failed",
+                errors: {
+                    message: "otp sent failed",
+                }
+            })
+        })
+    })
+        .catch(err => {
+            res.status(500).json({
+                message: "otp sent failed",
+                errors: {
+                    message: "otp sent failed",
+                }
+            })
+        })
+
+
+
+}
 
 
 export const userGetAvatar = (req, res, next) => {

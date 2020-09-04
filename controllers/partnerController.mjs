@@ -6,6 +6,80 @@ import Avatar from '../models/avatarModel.mjs'
 import PersonalDoc from '../models/personalDocModel.mjs'
 import { checkAndBundleNonEmptyFields, userSignupInputValidator } from '../utils/customValidator.mjs'
 
+export const sendAndVerifyPartnerOtp = (req, res, next) => {
+    let { mobile, userId, type } = req.body
+    const otp = generate(6)
+    mobile = "+91" + mobile
+    console.log("mobile number is " + mobile)
+    let message = ""
+    if (type === 1) {
+        //registration
+        message = `Otp for homeserv registration is ${otp}`
+    }
+
+    if (type === 2) {
+        //login
+        message = `Otp for homeserv login is ${otp}`
+    }
+
+    if (type === 3) {
+        //change number
+        message = `Otp for homeserv for number change is ${otp}`
+    }
+
+    if (type === 4) {
+        //forget password
+        message = `Otp for homeserv password recovery is ${otp}`
+    }
+
+
+    let body = {
+        "listsms":
+            [
+                {
+                    "sms": message,
+                    "mobiles": mobile,
+                    "senderid": "HOMESERV-OTP",
+                    "clientSMSID": "1947692308",
+                    "accountusagetypeid": "1"
+                },
+            ],
+        "password": "f4c5eb7711XX", "user": "otdemo"
+    }
+
+
+    fetch('http://login.otechnix.in/REST/sendsms/ ', {
+        method: 'post',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+    }).then(response => {
+        response.json().then(response => {
+            console.log(response)
+            res.status(200).json({
+                message: "otp sent successfully",
+                otp
+            })
+        }).catch(err => {
+            console.log(err)
+            res.status(500).json({
+                message: "otp sent failed",
+                errors: {
+                    message: "otp sent failed",
+                }
+            })
+        })
+    })
+        .catch(err => {
+            res.status(500).json({
+                message: "otp sent failed",
+                errors: {
+                    message: "otp sent failed",
+                }
+            })
+        })
+
+}
+
 
 export const getPartnerAvatar = (req, res, next) => {
     const userId = req.params.id

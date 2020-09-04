@@ -3,9 +3,10 @@ import multer from 'multer'
 import {
     partnerList, partnerSignIn, partnerSignUp, partnerUpdate,
     uploadPartnerDocumentIdProof, uploadPartnerDocumentAddressProof,
-    uploadPartnerAvatar
+    uploadPartnerAvatar, sendAndVerifyPartnerOtp
 }
     from '../controllers/partnerController.mjs'
+import { sendAndVerifyUserOtp } from '../controllers/userController.mjs'
 const router = express.Router()
 
 const storage = multer.diskStorage({
@@ -46,5 +47,6 @@ router.put('/edit/:id', partnerUpdate)
 router.post('/upload/avatar/:id', upload.single('partnerAvatar'), uploadPartnerAvatar)
 router.post('/upload/id/:id', upload.single('personalId'), uploadPartnerDocumentIdProof)
 router.post('/upload/address/:id', upload.single('addressId'), uploadPartnerDocumentAddressProof)
+router.post('/otp', sendAndVerifyPartnerOtp)
 
 export default router
