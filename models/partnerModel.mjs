@@ -36,9 +36,15 @@ const partnerSchema = Schema({
     states: {
         type: String
     },
-    updatedAt:{
+    updatedAt: {
         type: Date,
         default: Date.now
+    },
+    latitude: {
+        type: String
+    },
+    longitude: {
+        type: String
     }
 })
 

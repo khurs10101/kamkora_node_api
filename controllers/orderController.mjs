@@ -2,9 +2,15 @@ import express from 'express'
 import Order from '../models/orderModel.mjs'
 import Cart from '../models/cartModel.mjs'
 import Partner from '../models/partnerModel.mjs'
+import Address from '../models/addressModel.mjs'
 import { checkAndBundleNonEmptyFields, generate } from '../utils/customValidator.mjs'
 import { distanceBetweenLatLong } from '../utils/geoUtils.mjs'
+import isEmpty from 'lodash/isEmpty.js'
 
+
+let partnerAndDistance = {}
+let partnerAndCity = []
+let sortedPartnerByDistance = []
 
 export const completedCurrentOrder = (req, res, next) => {
     console.log(req.body)
@@ -274,16 +280,27 @@ const getCartOfUsers = (req, res, next) => {
     })
 }
 
-const addToCart = (req, res, next) => {
-    const { orders } = req.body
+const addToCart = async (req, res, next) => {
+    const { orders, addressId } = req.body
     const userId = req.params.id
     const docketId = generate(6)
-    console.log(orders)
+    let address
+    // console.log(orders)
+    try {
+        address = await Address.findOne({
+            _id: addressId
+        })
+        console.log(address)
+    } catch (error) {
+        console.log(error)
+    }
     let orderList = []
     let cart = new Cart({
         userId: userId,
         docketId: docketId
     })
+    cart.address.push(address)
+
     for (let order in orders) {
         // orderList.push(new Order({
         //     ...order
@@ -326,33 +343,42 @@ const addToCart = (req, res, next) => {
 
 const assignOrderAuto = (res, cart) => {
     console.log("Assign cart auto result: " + cart)
-    const address = cart.address
-    const city = address.city
+    const address = cart['address'][0]
+    const city = address["city"]
     const userLatitude = address.latitude
     const userLongitude = address.longitude
+    console.log("user city: " + city)
 
-
-    let sortedPartnerByDistance = []
-    let partnerAndDistance = {}
 
     Partner.find({
-        city: city
+
     }).then(partners => {
-        if (partners) {
+        if (partners.length > 0) {
 
             for (let i in partners) {
-                partnerLatitude = partners[i].latitude
-                partnerLongitude = partners[i].longitude
-                let distance = distanceBetweenLatLong(userLatitude, userLongitude,
-                    partnerLatitude, partnerLongitude)
-                partnerAndDistance['partner'] = partners[i]
-                partnerAndDistance['distance'] = distance
-                sortedPartnerByDistance.push(partnerAndDistance)
+                console.log(partners[i])
+                console.log(partners[i].latitude)
+                console.log(partners[i].city)
+                if (partners[i].latitude !== undefined && partners[i].longitude !== undefined) {
+                    console.log("this block shouldnt be called")
+                    partnerLatitude = partners[i].latitude
+                    partnerLongitude = partners[i].longitude
+                    let distance = distanceBetweenLatLong(userLatitude, userLongitude,
+                        partnerLatitude, partnerLongitude)
+                    partnerAndDistance['partner'] = partners[i]
+                    partnerAndDistance['distance'] = distance
+                    sortedPartnerByDistance.push(partnerAndDistance)
+                } else {
+                    partnerAndCity.push(partners[i])
+                }
             }
 
+            console.log(sortedPartnerByDistance)
+            console.log(partnerAndCity)
+            console.log("item popped is: " + partnerAndCity.pop())
 
         } else {
-
+            console.log("partners not found for city")
         }
     })
 
