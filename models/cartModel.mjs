@@ -2,8 +2,8 @@ import mongoose from 'mongoose'
 import Order from './orderModel.mjs'
 import Address from './addressModel.mjs'
 import { generate } from '../utils/customValidator.mjs'
-
-const cartSchema = mongoose.Schema({
+const Schema = mongoose.Schema
+const cartSchema = new Schema({
     userId: {
         type: String
     },
@@ -16,7 +16,7 @@ const cartSchema = mongoose.Schema({
     },
 
     address: {
-        type: Address.Schema
+        type: [Address.Schema]
     },
 
     addressId: {
