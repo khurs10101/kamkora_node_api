@@ -330,7 +330,7 @@ const addToCart = async (req, res, next) => {
             message: "orders added successfully",
             results: result
         })
-        assignOrderAuto(res, result);
+        // assignOrderAuto(res, result);
     }).catch(error => {
         console.log(error)
     })
