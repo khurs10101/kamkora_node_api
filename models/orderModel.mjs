@@ -39,7 +39,7 @@ const orderSchema = new Schema({
         default: Date.now
     },
     address: {
-        type: [Address.Schema]
+        type: Address.Schema
     }
 })
 
