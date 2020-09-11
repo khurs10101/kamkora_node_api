@@ -1,11 +1,8 @@
-import express from 'express'
 import Order from '../models/orderModel.mjs'
 import Cart from '../models/cartModel.mjs'
 import Partner from '../models/partnerModel.mjs'
 import Address from '../models/addressModel.mjs'
-import { checkAndBundleNonEmptyFields, generate } from '../utils/customValidator.mjs'
-import { distanceBetweenLatLong } from '../utils/geoUtils.mjs'
-import isEmpty from 'lodash/isEmpty.js'
+import {checkAndBundleNonEmptyFields, generate} from '../utils/customValidator.mjs'
 
 
 let partnerAndDistance = {}
@@ -14,7 +11,7 @@ let sortedPartnerByDistance = []
 
 export const completedCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const { orderId, partnerId } = req.body
+    const {orderId, partnerId} = req.body
     const id = orderId
     console.log(id)
     Order.findOne({
@@ -57,7 +54,7 @@ export const completedCurrentOrder = (req, res, next) => {
                 Order.updateOne({
                     _id: id
                 }, {
-                    $set: { status: 'completed' }
+                    $set: {status: 'completed'}
                 }).then(order => {
                     res.status(200).json({
                         message: "Order Completed",
@@ -105,7 +102,7 @@ export const completedCurrentOrder = (req, res, next) => {
 
 export const acceptCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const { orderId, partnerId } = req.body
+    const {orderId, partnerId} = req.body
     const id = orderId
     console.log(id)
     Order.findOne({
@@ -177,7 +174,7 @@ export const acceptCurrentOrder = (req, res, next) => {
 
 export const rejectCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const { orderId, partnerId } = req.body
+    const {orderId, partnerId} = req.body
     const id = orderId
     console.log(id)
     Order.findOne({
@@ -242,10 +239,9 @@ export const rejectCurrentOrder = (req, res, next) => {
 
 
 export const getOrdersOfPartners = (req, res, next) => {
-    const { userId, serviceId } = req.body
+    const {userId, serviceId} = req.body
 
-    Order.find({
-    }).sort({ updatedAt: "desc" }).then(doc => {
+    Order.find({}).sort({updatedAt: "desc"}).then(doc => {
         res.status(200).json({
             message: "List of orders",
             orders: doc
@@ -265,7 +261,7 @@ const getCartOfUsers = (req, res, next) => {
     const userId = req.params.id
     Cart.find({
         userId: userId
-    }).sort({ updatedAt: "desc" }).then(carts => {
+    }).sort({updatedAt: "desc"}).then(carts => {
         res.status(200).json({
             message: "List of orders by cart",
             carts
@@ -281,9 +277,8 @@ const getCartOfUsers = (req, res, next) => {
 }
 
 const addToCart = async (req, res, next) => {
-    const { orders, addressId } = req.body
+    const {orders, addressId} = req.body
     const userId = req.params.id
-    const docketId = generate(6)
     let address
     // console.log(orders)
     try {
@@ -297,7 +292,7 @@ const addToCart = async (req, res, next) => {
     let orderList = []
     let cart = new Cart({
         userId: userId,
-        docketId: docketId
+        docketId: generate(6)
     })
     cart.address.push(address)
 
@@ -307,7 +302,7 @@ const addToCart = async (req, res, next) => {
         // }))
         console.log(order)
         let orderObject = new Order({
-            docketId: docketId,
+            docketId: generate(6),
             userId: userId,
             ...orders[order]
         });
@@ -350,9 +345,7 @@ const assignOrderAuto = (res, cart) => {
     console.log("user city: " + city)
 
 
-    Partner.find({
-
-    }).then(partners => {
+    Partner.find({}).then(partners => {
         if (partners.length > 0) {
 
             for (let i in partners) {
@@ -361,10 +354,10 @@ const assignOrderAuto = (res, cart) => {
                 console.log(partners[i].city)
                 if (partners[i].latitude !== undefined && partners[i].longitude !== undefined) {
                     console.log("this block shouldnt be called")
-                    partnerLatitude = partners[i].latitude
-                    partnerLongitude = partners[i].longitude
-                    let distance = distanceBetweenLatLong(userLatitude, userLongitude,
-                        partnerLatitude, partnerLongitude)
+                    // partnerLatitude = partners[i].latitude
+                    // partnerLongitude = partners[i].longitude
+                    // let distance = distanceBetweenLatLong(userLatitude, userLongitude,
+                    //     partnerLatitude, partnerLongitude)
                     partnerAndDistance['partner'] = partners[i]
                     partnerAndDistance['distance'] = distance
                     sortedPartnerByDistance.push(partnerAndDistance)
@@ -388,7 +381,7 @@ const assignOrderAuto = (res, cart) => {
 
 const getAllOrders = (req, res, next) => {
 
-    Order.find({}).sort({ updatedAt: 'desc' }).then(orders => {
+    Order.find({}).sort({updatedAt: 'desc'}).then(orders => {
         res.status(200).json({
             message: "List of all orders",
             cart: orders
@@ -410,7 +403,7 @@ const getAllOrdersOfSingleUser = (req, res, next) => {
 
     Order.find({
         userId: userId
-    }).sort({ updatedAt: "desc" }).then(orders => {
+    }).sort({updatedAt: "desc"}).then(orders => {
         res.status(200).json({
             message: "Current user order history",
             orders
@@ -457,4 +450,4 @@ const updateOrder = (req, res, next) => {
 }
 
 
-export { addOrder, updateOrder, getAllOrders, getAllOrdersOfSingleUser, addToCart, getCartOfUsers }
+export {addOrder, updateOrder, getAllOrders, getAllOrdersOfSingleUser, addToCart, getCartOfUsers}

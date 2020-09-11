@@ -16,7 +16,7 @@ const userSchema = Schema({
         type: String
     },
     isVerified: {
-        type: Boolean
+        type: String
     }
     ,
     avater: {

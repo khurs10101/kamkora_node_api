@@ -1,8 +1,9 @@
 import fs from 'fs'
 import SubService from '../models/subServiceModel.mjs'
 import Service from '../models/serviceModel.mjs'
-import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
+import {checkAndBundleNonEmptyFields} from '../utils/customValidator.mjs'
 import isEmpty from 'lodash/isEmpty.js'
+import SubSubService from "../models/SubSubService.mjs";
 
 
 export const searchServiceAndSubservice = async (req, res, next) => {
@@ -22,7 +23,7 @@ export const searchServiceAndSubservice = async (req, res, next) => {
 
     let result = await SubService
         .find({
-            name: { $regex: query, $options: "i" }
+            name: {$regex: query, $options: "i"}
         }).catch(err => {
             res.status(500).json({
                 message: "Server error",
@@ -62,8 +63,95 @@ export const listSubserviceByService = (req, res, next) => {
     })
 }
 
+export const getSubSubServiceBySubServiceId = async (req, res, next) => {
+    try {
+        const subServiceId = req.params.id
+        const result = await SubSubService.find({subServiceId})
+        if (result) {
+            res.status(200).json({
+                message: `List of all Sub Sub Service by subServiceId: ${subServiceId}`,
+                subsubservice: result
+            })
+        } else {
+            res.status(404).json({
+                message: `Sub Sub Service not found by subServiceId: ${subServiceId}`,
+                errors: {
+                    message: `Sub Sub Service not found by subServiceId: ${subServiceId}`
+                }
+            })
+        }
+    } catch (e) {
+        res.status(500).json({
+            message: `Error retrieving Sub Sub Service by subServiceId: ${subServiceId}`,
+            errors: {
+                message: `Error retrieving Sub Sub Service by subServiceId: ${subServiceId}`
+            }
+        })
+    }
+}
+
+export const getAllSubSubService = async (req, res, next) => {
+    try {
+        const subsubservice = await SubSubService.find({})
+        res.status(200).json({
+            message: "List of all sub sub services",
+            subsubservice
+        })
+    } catch (e) {
+        res.status(500).json({
+            message: "error retrieving sub sub service",
+            errors: {
+                message: "error retrieving sub sub service"
+            }
+        })
+    }
+}
+
+export const addSubSubService = async (req, res, next) => {
+    const {
+        serviceId, subServiceId,
+        subSubServiceId, title, description,
+        rate
+    } = req.body
+    const url = req.file.destination + "/" + req.file.filename
+    try {
+        const subsubservice = await SubSubService.findOne({subSubServiceId})
+        if (!subsubservice) {
+            let sss = new SubSubService({
+                serviceId, subServiceId, subSubServiceId,
+                title, description, rate, url
+            })
+            sss = await sss.save()
+            if (sss) {
+                res.status(201).json({
+                    message: "Sub Sub service created",
+                    subsubservice: sss
+                })
+            }
+        } else {
+            fs.unlinkSync(url)
+            res.status(201).json({
+                message: "Sub Sub service already exists",
+                errors: {
+                    message: "Sub Sub service already exists"
+                }
+            })
+        }
+    } catch (e) {
+        fs.unlinkSync(url)
+        res.status(500).json({
+            message: "Sub Sub Service saving failed",
+            errors: {
+                message: "Sub Sub Service saving failed"
+            }
+        })
+    }
+
+
+}
+
 export const addSubService = (req, res, next) => {
-    const { serviceId, subServiceId, name, rate } = checkAndBundleNonEmptyFields(req.body)
+    const {serviceId, subServiceId, name, rate} = checkAndBundleNonEmptyFields(req.body)
     const url = req.file.destination + "/" + req.file.filename
     Service.findOne({
         serviceId
@@ -237,7 +325,6 @@ export const addAService = (req, res, next) => {
 export const updateService = (req, res, next) => {
 
 
-
 }
 
 export const updateSubService = (req, res, next) => {
@@ -250,11 +337,10 @@ export const updateSubService = (req, res, next) => {
         if (service) {
 
 
-
             if (!isEmpty(finalSubService)) {
                 let newSubCategory = [
                     ...service._doc.subcategory,
-                    { ...finalSubService }
+                    {...finalSubService}
 
                 ]
 
@@ -309,7 +395,6 @@ export const updateSubService = (req, res, next) => {
             }
         })
     })
-
 
 
 }

@@ -1,11 +1,16 @@
 import express from 'express'
 import multer from 'multer'
-import auth from '../middlewares/jwtAuthMiddleware.mjs'
 import {
-    listAllServices, addAService,
-    updateService, updateSubService,
-    deleteService, addSubService, listSubserviceByService,
-    searchServiceAndSubservice
+    addAService,
+    addSubService,
+    addSubSubService,
+    deleteService,
+    getAllSubSubService,
+    getSubSubServiceBySubServiceId,
+    listAllServices,
+    listSubserviceByService,
+    searchServiceAndSubservice,
+    updateService
 } from '../controllers/serviceController.mjs'
 
 const router = express.Router()
@@ -16,6 +21,8 @@ const storage = multer.diskStorage({
             cb(null, 'upload/services')
         if (file.fieldname === 'sub_service_image')
             cb(null, 'upload/sub_services')
+        if (file.fieldname === 'sub_sub_service')
+            cb(null, 'upload/sub_sub_service')
 
     },
     filename: function (req, file, cb) {
@@ -34,4 +41,7 @@ router.post('/addsubservice', upload.single('sub_service_image'), addSubService)
 router.post('/delete/:id', deleteService)
 router.get('/subservice/:id', listSubserviceByService)
 router.get('/search', searchServiceAndSubservice)
+router.post('/addsubsubservice', upload.single('sub_sub_service'), addSubSubService)
+router.get('/subsubservice', getAllSubSubService)
+router.get('/subsubservice/:id', getSubSubServiceBySubServiceId)
 export default router
