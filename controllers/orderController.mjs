@@ -277,11 +277,12 @@ const getCartOfUsers = (req, res, next) => {
 }
 
 const addToCart = async (req, res, next) => {
+    console.log(req.body)
     const {orders, addressId} = req.body
     const userId = req.params.id
     let address
-    console.log(orders)
-    console.log(addressId)
+    // console.log(orders)
+    // console.log(addressId)
     try {
         address = await Address.findOne({
             _id: addressId
