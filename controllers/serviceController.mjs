@@ -1,7 +1,7 @@
 import fs from 'fs'
 import SubService from '../models/subServiceModel.mjs'
 import Service from '../models/serviceModel.mjs'
-import {checkAndBundleNonEmptyFields} from '../utils/customValidator.mjs'
+import { checkAndBundleNonEmptyFields } from '../utils/customValidator.mjs'
 import isEmpty from 'lodash/isEmpty.js'
 import SubSubService from "../models/SubSubService.mjs";
 
@@ -23,7 +23,7 @@ export const searchServiceAndSubservice = async (req, res, next) => {
 
     let result = await SubService
         .find({
-            name: {$regex: query, $options: "i"}
+            name: { $regex: query, $options: "i" }
         }).catch(err => {
             res.status(500).json({
                 message: "Server error",
@@ -66,7 +66,7 @@ export const listSubserviceByService = (req, res, next) => {
 export const getSubSubServiceBySubServiceId = async (req, res, next) => {
     try {
         const subServiceId = req.params.id
-        const result = await SubSubService.find({subServiceId})
+        const result = await SubSubService.find({ subServiceId })
         if (result) {
             res.status(200).json({
                 message: `List of all Sub Sub Service by subServiceId: ${subServiceId}`,
@@ -115,7 +115,7 @@ export const addSubSubService = async (req, res, next) => {
     } = req.body
     const url = req.file.destination + "/" + req.file.filename
     try {
-        const subsubservice = await SubSubService.findOne({subSubServiceId})
+        const subsubservice = await SubSubService.findOne({ subSubServiceId })
         if (!subsubservice) {
             let sss = new SubSubService({
                 serviceId, subServiceId, subSubServiceId,
@@ -151,7 +151,7 @@ export const addSubSubService = async (req, res, next) => {
 }
 
 export const addSubService = (req, res, next) => {
-    const {serviceId, subServiceId, name, rate} = checkAndBundleNonEmptyFields(req.body)
+    const { serviceId, subServiceId, name, rate } = checkAndBundleNonEmptyFields(req.body)
     const url = req.file.destination + "/" + req.file.filename
     Service.findOne({
         serviceId
@@ -291,8 +291,8 @@ export const addAService = (req, res, next) => {
                     payload: result
                 })
             }).catch(error => {
-                fs.unlinkSync(url)
-                req.status(500).json({
+                // fs.unlinkSync(url)
+                res.status(500).json({
                     message: "Server error",
                     errors: {
                         message: "Server error"
@@ -301,7 +301,7 @@ export const addAService = (req, res, next) => {
             })
         } else {
             fs.unlinkSync(url)
-            req.status(404).json({
+            res.status(404).json({
                 message: "Service already exists",
                 errors: {
                     message: "Service already exists"
@@ -340,7 +340,7 @@ export const updateSubService = (req, res, next) => {
             if (!isEmpty(finalSubService)) {
                 let newSubCategory = [
                     ...service._doc.subcategory,
-                    {...finalSubService}
+                    { ...finalSubService }
 
                 ]
 
