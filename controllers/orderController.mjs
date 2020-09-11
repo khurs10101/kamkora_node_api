@@ -278,9 +278,10 @@ const getCartOfUsers = (req, res, next) => {
 
 const addToCart = async (req, res, next) => {
     console.log(req.body)
-    const { orders, address, addressId } = req.body
+    let { orders, address, addressId } = req.body
     console.log("Address Id: " + addressId)
     const userId = req.params.id
+    address = address[0]
     // console.log(orders)
     // console.log(addressId)
     // try {
