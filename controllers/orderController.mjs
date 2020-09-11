@@ -278,26 +278,25 @@ const getCartOfUsers = (req, res, next) => {
 
 const addToCart = async (req, res, next) => {
     console.log(req.body)
-    const { orders, addressId } = req.body
+    const { orders, address } = req.body
     console.log("Address Id: " + addressId)
     const userId = req.params.id
-    let address
     // console.log(orders)
     // console.log(addressId)
-    try {
-        address = await Address.findOne({
-            _id: addressId
-        })
-        // console.log(address)
-    } catch (error) {
-        console.log(error)
-    }
+    // try {
+    //     address = await Address.findOne({
+    //         _id: addressId
+    //     })
+    //     // console.log(address)
+    // } catch (error) {
+    //     console.log(error)
+    // }
     let orderList = []
     let cart = new Cart({
         userId: userId,
         docketId: generate(6),
     })
-    cart.address.push(address[0])
+    cart.address.push(address)
 
     for (let order in orders) {
         // orderList.push(new Order({
@@ -309,7 +308,7 @@ const addToCart = async (req, res, next) => {
             userId: userId,
             ...orders[order]
         });
-        orderObject.address.push(address[0])
+        orderObject.address.push(address)
         cart.orders.push(orderObject)
 
         orderObject.save().then(result => {
