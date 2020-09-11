@@ -2,7 +2,7 @@ import Order from '../models/orderModel.mjs'
 import Cart from '../models/cartModel.mjs'
 import Partner from '../models/partnerModel.mjs'
 import Address from '../models/addressModel.mjs'
-import {checkAndBundleNonEmptyFields, generate} from '../utils/customValidator.mjs'
+import { checkAndBundleNonEmptyFields, generate } from '../utils/customValidator.mjs'
 
 
 let partnerAndDistance = {}
@@ -11,7 +11,7 @@ let sortedPartnerByDistance = []
 
 export const completedCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const {orderId, partnerId} = req.body
+    const { orderId, partnerId } = req.body
     const id = orderId
     console.log(id)
     Order.findOne({
@@ -54,7 +54,7 @@ export const completedCurrentOrder = (req, res, next) => {
                 Order.updateOne({
                     _id: id
                 }, {
-                    $set: {status: 'completed'}
+                    $set: { status: 'completed' }
                 }).then(order => {
                     res.status(200).json({
                         message: "Order Completed",
@@ -102,7 +102,7 @@ export const completedCurrentOrder = (req, res, next) => {
 
 export const acceptCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const {orderId, partnerId} = req.body
+    const { orderId, partnerId } = req.body
     const id = orderId
     console.log(id)
     Order.findOne({
@@ -174,7 +174,7 @@ export const acceptCurrentOrder = (req, res, next) => {
 
 export const rejectCurrentOrder = (req, res, next) => {
     console.log(req.body)
-    const {orderId, partnerId} = req.body
+    const { orderId, partnerId } = req.body
     const id = orderId
     console.log(id)
     Order.findOne({
@@ -239,9 +239,9 @@ export const rejectCurrentOrder = (req, res, next) => {
 
 
 export const getOrdersOfPartners = (req, res, next) => {
-    const {userId, serviceId} = req.body
+    const { userId, serviceId } = req.body
 
-    Order.find({}).sort({updatedAt: "desc"}).then(doc => {
+    Order.find({}).sort({ updatedAt: "desc" }).then(doc => {
         res.status(200).json({
             message: "List of orders",
             orders: doc
@@ -261,7 +261,7 @@ const getCartOfUsers = (req, res, next) => {
     const userId = req.params.id
     Cart.find({
         userId: userId
-    }).sort({updatedAt: "desc"}).then(carts => {
+    }).sort({ updatedAt: "desc" }).then(carts => {
         res.status(200).json({
             message: "List of orders by cart",
             carts
@@ -278,7 +278,8 @@ const getCartOfUsers = (req, res, next) => {
 
 const addToCart = async (req, res, next) => {
     console.log(req.body)
-    const {orders, addressId} = req.body
+    const { orders, addressId } = req.body
+    console.log("Address Id: " + addressId)
     const userId = req.params.id
     let address
     // console.log(orders)
@@ -287,7 +288,7 @@ const addToCart = async (req, res, next) => {
         address = await Address.findOne({
             _id: addressId
         })
-        console.log(address)
+        // console.log(address)
     } catch (error) {
         console.log(error)
     }
@@ -383,7 +384,7 @@ const assignOrderAuto = (res, cart) => {
 
 const getAllOrders = (req, res, next) => {
 
-    Order.find({}).sort({updatedAt: 'desc'}).then(orders => {
+    Order.find({}).sort({ updatedAt: 'desc' }).then(orders => {
         res.status(200).json({
             message: "List of all orders",
             cart: orders
@@ -405,7 +406,7 @@ const getAllOrdersOfSingleUser = (req, res, next) => {
 
     Order.find({
         userId: userId
-    }).sort({updatedAt: "desc"}).then(orders => {
+    }).sort({ updatedAt: "desc" }).then(orders => {
         res.status(200).json({
             message: "Current user order history",
             orders
@@ -452,4 +453,4 @@ const updateOrder = (req, res, next) => {
 }
 
 
-export {addOrder, updateOrder, getAllOrders, getAllOrdersOfSingleUser, addToCart, getCartOfUsers}
+export { addOrder, updateOrder, getAllOrders, getAllOrdersOfSingleUser, addToCart, getCartOfUsers }

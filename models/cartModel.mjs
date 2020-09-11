@@ -17,6 +17,10 @@ const cartSchema = mongoose.Schema({
 
     address: {
         type: [Address.Schema]
+    },
+
+    addressId: {
+        type: String
     }
 })
 
