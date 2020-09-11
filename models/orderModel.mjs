@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Address from '../models/addressModel.mjs'
 
 const Schema = mongoose.Schema
 
@@ -36,6 +37,9 @@ const orderSchema = new Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    address: {
+        type: [Address.Schema]
     }
 })
 

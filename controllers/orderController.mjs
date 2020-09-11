@@ -295,9 +295,9 @@ const addToCart = async (req, res, next) => {
     let orderList = []
     let cart = new Cart({
         userId: userId,
-        docketId: generate(6)
+        docketId: generate(6),
     })
-    cart.address.push(address)
+    cart.address.push(address[0])
 
     for (let order in orders) {
         // orderList.push(new Order({
@@ -309,7 +309,7 @@ const addToCart = async (req, res, next) => {
             userId: userId,
             ...orders[order]
         });
-
+        orderObject.address.push(address[0])
         cart.orders.push(orderObject)
 
         orderObject.save().then(result => {
