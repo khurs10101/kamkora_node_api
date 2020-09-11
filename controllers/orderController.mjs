@@ -280,7 +280,8 @@ const addToCart = async (req, res, next) => {
     const {orders, addressId} = req.body
     const userId = req.params.id
     let address
-    // console.log(orders)
+    console.log(orders)
+    console.log(addressId)
     try {
         address = await Address.findOne({
             _id: addressId
