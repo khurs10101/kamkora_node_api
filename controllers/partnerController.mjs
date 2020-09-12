@@ -354,7 +354,43 @@ export const partnerSignIn = (req, res, next) => {
 
 }
 
-export const partnerUpdate = (req, res, next) => {
+export const partnerUpdate = async (req, res, next) => {
+
+    const partnerId = req.params.id
+    const validBody = checkAndBundleNonEmptyFields(req.body)
+    console.log(validBody)
+    try {
+        let partner = await Partner.findById(partnerId)
+        if (partner) {
+            console.log(partner)
+            const updatedPartner = await Partner.updateOne({
+                _id: partnerId
+            }, {
+                $set: validBody
+            })
+
+            res.status(201).json({
+                message: "partner details updated successfully",
+                updatedPartner
+            })
+        } else {
+            res.status(404).json({
+                message: "partner details not found",
+                errors: {
+                    message: "partner details not found"
+                }
+            })
+        }
+    } catch (e) {
+        res.status(500).json({
+            message: "partner details not found",
+            errors: {
+                message: "partner details not found"
+            }
+        })
+    }
+
+
 
 }
 
