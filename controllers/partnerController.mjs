@@ -185,11 +185,13 @@ export const uploadPartnerDocumentIdProof = (req, res, next) => {
     const userId = req.params.id
     const { doc_type } = req.body
     const url = req.file.destination + "/" + req.file.filename
-    let partnerDoc = new partnerDoc.save({
+    let partnerDoc = new PersonalDoc({
         userId,
         doc_type,
         url
-    }).save().then(doc => {
+    })
+
+    partnerDoc.save().then(doc => {
         res.status(201).json({
             message: "Id proof uploaded",
             result: doc
@@ -209,11 +211,13 @@ export const uploadPartnerDocumentAddressProof = (req, res, next) => {
     const userId = req.params.id
     const { doc_type } = req.body
     const url = req.file.destination + "/" + req.file.filename
-    let partnerDoc = new partnerDoc.save({
+    let partnerDoc = new PersonalDoc({
         userId,
         doc_type,
         url
-    }).save().then(doc => {
+    })
+
+    partnerDoc.save().then(doc => {
         res.status(201).json({
             message: "Address proof uploaded",
             result: doc
